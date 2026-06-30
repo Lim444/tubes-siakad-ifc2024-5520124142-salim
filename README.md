@@ -80,6 +80,7 @@ Menampilkan daftar seluruh dosen yang terdaftar di sistem beserta NIDN dan naman
 Menampilkan daftar seluruh mahasiswa yang terdaftar beserta NPM, nama, dan dosen wali. Halaman ini menyediakan fitur lengkap CRUD:
 
 - **Tambah Mahasiswa** — Mengisi form dengan NPM, nama, dan memilih dosen wali. NPM bersifat unik.
+- **Tambah Akun Mahasiswa** — Mengisi form dengan username (npm), email, password.
 - **Edit Mahasiswa** — Mengubah nama dan dosen wali mahasiswa.
 - **Hapus Mahasiswa** — Menghapus data mahasiswa dari sistem dengan konfirmasi.
 - **Cari Mahasiswa** — Mencari berdasarkan NPM, nama, atau nama dosen wali.
@@ -168,7 +169,7 @@ Setelah server berjalan, akses aplikasi di: `http://127.0.0.1:8000`
 | Role      | Username | Password |
 |-----------|----------|----------|
 | Admin     | admin    | 12345    |
-| Mahasiswa | mhs1     | 12345    |
+| Mahasiswa | 5520124142 | 12345    |
 
 ---
 
@@ -234,5 +235,6 @@ Folder `screenshots/` berisi tangkapan layar dari setiap halaman aplikasi.
 | Nama         | Salim                               |
 | NPM          | 5520124142                          |
 | Kelas        | IFC 2024                            |
-| Mata Kuliah  | Web II — IF45123                   |
+| Mata Kuliah  | Web II — IF45123                    |
+| Prodi        | Teknik Informatika                  |
 | Institusi    | Fakultas Teknik Universitas Suryakancana |

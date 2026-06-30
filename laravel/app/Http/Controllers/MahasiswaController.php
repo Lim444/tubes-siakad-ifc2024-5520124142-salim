@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class MahasiswaController extends Controller
 {
@@ -42,32 +44,70 @@ class MahasiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'npm'  => 'required|string|max:10|unique:mahasiswa,npm',
+            'npm' => 'required|string|max:10|unique:mahasiswa,npm',
             'nidn' => 'required|string|max:10|exists:dosen,nidn',
             'nama' => 'required|string|max:50',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|max:50|unique:users,username',
+            'password' => 'required|string|min:5|confirmed',
         ]);
 
-        Mahasiswa::create($request->all());
-        return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan');
+        Mahasiswa::create([
+            'npm' => $request->npm,
+            'nidn' => $request->nidn,
+            'nama' => $request->nama,
+        ]);
+
+        User::create([
+            'name' => $request->nama,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'mahasiswa',
+            'npm' => $request->npm,
+        ]);
+
+        return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa dan akun berhasil ditambahkan');
     }
 
     public function edit(string $id)
     {
         $mahasiswa = Mahasiswa::findOrFail($id);
         $dosens = Dosen::all();
-        return view('mahasiswa.edit', compact('mahasiswa', 'dosens'));
+        $user = User::where('npm', $mahasiswa->npm)->first();
+        return view('mahasiswa.edit', compact('mahasiswa', 'dosens', 'user'));
     }
 
     public function update(Request $request, string $id)
     {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        $user = User::where('npm', $mahasiswa->npm)->first();
+
         $request->validate([
             'nidn' => 'required|string|max:10|exists:dosen,nidn',
             'nama' => 'required|string|max:50',
+            'username' => 'nullable|string|max:50|unique:users,username,' . ($user?->id ?? 'null') . ',id',
+            'email' => 'nullable|email|unique:users,email,' . ($user?->id ?? 'null') . ',id',
+            'password' => 'nullable|string|min:5|confirmed',
         ]);
 
-        $mahasiswa = Mahasiswa::findOrFail($id);
         $mahasiswa->update($request->only('nidn', 'nama'));
-        return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa berhasil diperbarui');
+
+        if ($user) {
+            $userData = [
+                'name' => $request->nama,
+                'username' => $request->username ?? $user->username,
+                'email' => $request->email ?? $user->email,
+            ];
+
+            if ($request->filled('password')) {
+                $userData['password'] = Hash::make($request->password);
+            }
+
+            $user->update($userData);
+        }
+
+        return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa dan akun berhasil diperbarui');
     }
 
     public function destroy(string $id)

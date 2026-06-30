@@ -36,6 +36,32 @@
             @error('nidn')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
         </div>
 
+        <hr style="margin:24px 0; border-color:#e2e8f0;">
+        <h3 style="margin-bottom:12px;">Akun Login Mahasiswa</h3>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="{{ old('username', $user->username ?? '') }}" maxlength="50" class="form-control" placeholder="Contoh: 5520124142">
+            @error('username')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ old('email', $user->email ?? '') }}" class="form-control" placeholder="Contoh: salimakbar142@siak.ac.id">
+            @error('email')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password Baru</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin mengubah password">
+            @error('password')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirmation">Konfirmasi Password Baru</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Ulangi password baru">
+        </div>
+
         <div class="form-footer">
             <button type="submit" class="btn btn-primary btn-lg">
                 <i class="fa-solid fa-floppy-disk"></i> Simpan

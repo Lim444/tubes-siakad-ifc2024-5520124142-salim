@@ -15,25 +15,53 @@
 
         <div class="form-group">
             <label for="npm">NPM</label>
-            <input type="text" id="npm" name="npm" maxlength="10" class="form-control" placeholder="Masukkan NPM" required>
+            <input type="text" id="npm" name="npm" maxlength="10" class="form-control" placeholder="Masukkan NPM" value="{{ old('npm') }}" required>
             @error('npm')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
         </div>
 
         <div class="form-group">
             <label for="nama">Nama</label>
-            <input type="text" id="nama" name="nama" maxlength="50" class="form-control" placeholder="Masukkan nama mahasiswa" required>
+            <input type="text" id="nama" name="nama" maxlength="50" class="form-control" placeholder="Masukkan nama mahasiswa" value="{{ old('nama') }}" required>
             @error('nama')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
         </div>
 
         <div class="form-group">
             <label for="nidn">Dosen Wali</label>
             <select id="nidn" name="nidn" class="form-control" required>
-                <option value="" disabled selected hidden>Pilih Dosen</option>
+                <option value="" disabled {{ old('nidn') ? '' : 'selected' }} hidden>Pilih Dosen</option>
                 @foreach($dosens as $dosen)
-                <option value="{{ $dosen->nidn }}">{{ $dosen->nidn }} - {{ $dosen->nama }}</option>
+                <option value="{{ $dosen->nidn }}" {{ old('nidn') == $dosen->nidn ? 'selected' : '' }}>{{ $dosen->nidn }} - {{ $dosen->nama }}</option>
                 @endforeach
             </select>
             @error('nidn')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <hr style="margin:24px 0; border-color:#e2e8f0;">
+        <h3 style="margin-bottom:12px;">Akun Login Mahasiswa</h3>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" maxlength="50" class="form-control" placeholder="Contoh: 5520124142" value="{{ old('username') }}" required>
+            <small style="display:block; margin-top:6px; color:#64748b;">Contoh username: NPM mahasiswa</small>
+            @error('username')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Contoh: salimakbar142@siak.ac.id" value="{{ old('email') }}" required>
+            <small style="display:block; margin-top:6px; color:#64748b;">Contoh email: nama lengkap + 3 digit NPM terakhir@siak.ac.id</small>
+            @error('email')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Buat password" value="{{ old('password') }}" required>
+            @error('password')<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirmation">Konfirmasi Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Ulangi password" value="{{ old('password_confirmation') }}" required>
         </div>
 
         <div class="form-footer">

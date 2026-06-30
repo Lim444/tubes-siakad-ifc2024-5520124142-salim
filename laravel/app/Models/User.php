@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'npm',
     ];
 
     /**
@@ -62,5 +64,10 @@ class User extends Authenticatable
     public function isMahasiswa(): bool
     {
         return $this->role === 'mahasiswa';
+    }
+
+    public function mahasiswa(): BelongsTo
+    {
+        return $this->belongsTo(Mahasiswa::class, 'npm', 'npm');
     }
 }

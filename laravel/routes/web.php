@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/krs', [KrsController::class, 'index'])->name('krs.index');
     Route::get('/krs/create', [KrsController::class, 'create'])->name('krs.create');
     Route::post('/krs', [KrsController::class, 'store'])->name('krs.store');
+    Route::delete('/krs/{krs}', [KrsController::class, 'destroy'])->name('krs.destroy');
 });
 
 // Routes khusus ADMIN
@@ -64,8 +65,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.update');
     Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
 
-    // KRS – admin bisa edit / hapus
+    // KRS – admin bisa edit
     Route::get('/krs/{krs}/edit', [KrsController::class, 'edit'])->name('krs.edit');
     Route::put('/krs/{krs}', [KrsController::class, 'update'])->name('krs.update');
-    Route::delete('/krs/{krs}', [KrsController::class, 'destroy'])->name('krs.destroy');
 });

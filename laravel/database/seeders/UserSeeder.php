@@ -13,18 +13,19 @@ class UserSeeder extends Seeder
     {
         User::create([
             'username' => 'admin',
-            'email' => 'admin@siak.ac.id',
+            'email'    => 'admin@siak.ac.id',
             'password' => Hash::make('12345'),
-            'role' => 'admin',
-            'name' => 'Administrator',
+            'role'     => 'admin',
+            'name'     => 'Administrator',
         ]);
 
         User::create([
-            'username' => 'mhs1',
-            'email' => 'mhs1@siak.ac.id',
+            'username' => '5520124142',
+            'email'    => 'salimakbar142@siak.ac.id',
             'password' => Hash::make('12345'),
-            'role' => 'mahasiswa',
-            'name' => 'Salim Akbar',
+            'role'     => 'mahasiswa',
+            'name'     => 'Salim Akbar',
+            'npm'      => '5520124142',
         ]);
     }
 }

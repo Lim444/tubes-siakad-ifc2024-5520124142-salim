@@ -11,7 +11,7 @@
 | Role      | Username | Password |
 |-----------|----------|----------|
 | Admin     | admin    | 12345    |
-| Mahasiswa | mhs1     | 12345    |
+| Mahasiswa | 5520124142 | 12345    |
 
 ---
 

@@ -12,24 +12,30 @@ class JadwalController extends Controller
     public function index(Request $request)
     {
         $search    = $request->keyword;
-        $sort      = in_array($request->get('sort'), ['hari', 'kelas', 'jam_mulai', 'id'])
+        $sort      = in_array($request->get('sort'), ['hari', 'kelas', 'nama_matakuliah', 'dosen', 'jam_mulai', 'id'])
                         ? $request->get('sort') : 'id';
         $direction = $request->get('direction') === 'desc' ? 'desc' : 'asc';
 
-        $jadwals = Jadwal::with(['matakuliah', 'dosen'])
+        $jadwals = Jadwal::select('jadwal.*')
+            ->with(['matakuliah', 'dosen'])
+            ->leftJoin('matakuliah', 'jadwal.kode_matakuliah', 'matakuliah.kode_matakuliah')
+            ->leftJoin('dosen', 'jadwal.nidn', 'dosen.nidn')
             ->when($search, function ($query, $search) {
-                return $query->where('kelas', 'like', "%{$search}%")
-                    ->orWhere('hari', 'like', "%{$search}%")
-                    ->orWhereHas('matakuliah', function ($q) use ($search) {
-                        $q->where('nama_matakuliah', 'like', "%{$search}%")
-                          ->orWhere('kode_matakuliah', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('dosen', function ($q) use ($search) {
-                        $q->where('nama', 'like', "%{$search}%")
-                          ->orWhere('nidn', 'like', "%{$search}%");
-                    });
+                return $query->where('jadwal.kelas', 'like', "%{$search}%")
+                    ->orWhere('jadwal.hari', 'like', "%{$search}%")
+                    ->orWhere('matakuliah.nama_matakuliah', 'like', "%{$search}%")
+                    ->orWhere('matakuliah.kode_matakuliah', 'like', "%{$search}%")
+                    ->orWhere('dosen.nama', 'like', "%{$search}%")
+                    ->orWhere('dosen.nidn', 'like', "%{$search}%");
             })
-            ->orderBy($sort, $direction)
+            ->when($sort === 'nama_matakuliah', function ($query) use ($direction) {
+                return $query->orderBy('matakuliah.nama_matakuliah', $direction);
+            }, function ($query) use ($sort, $direction) {
+                if ($sort === 'dosen') {
+                    return $query->orderBy('dosen.nama', $direction);
+                }
+                return $query->orderBy('jadwal.' . $sort, $direction);
+            })
             ->paginate(10)
             ->withQueryString();
 

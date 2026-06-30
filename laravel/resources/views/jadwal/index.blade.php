@@ -27,7 +27,19 @@
                 <i class="fa-solid fa-arrow-down-{{ $jadSortDir === 'asc' ? 'a-z' : 'z-a' }}"></i>
                 {{ $jadSortDir === 'asc' ? 'A-Z' : 'Z-A' }}
             </a>
-            <form class="search-form" method="GET" action="{{ route('jadwal.index') }}">
+            @include('partials.sort_dropdown', [
+                'id' => 'jadwalSortBtn',
+                'target' => 'jadwalTableBody',
+                'formId' => 'jadwalSearchForm',
+                'options' => [
+                    ['label' => 'Nama Matakuliah', 'col' => 1, 'value' => 'nama_matakuliah'],
+                    ['label' => 'Dosen', 'col' => 2, 'value' => 'dosen'],
+                    ['label' => 'Kelas', 'col' => 3, 'value' => 'kelas'],
+                ]
+            ])
+            <form id="jadwalSearchForm" class="search-form" method="GET" action="{{ route('jadwal.index') }}">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+                <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input name="keyword" type="text" placeholder="Cari jadwal..." value="{{ request('keyword') }}">
@@ -116,6 +128,7 @@
         tableBodyId: 'jadwalTableBody',
         noResultRowId: 'jadwalNoResult',
         numberSelector: '.row-number',
+        sortBtnId: 'jadwalSortBtn'
     });
 </script>
 @endsection

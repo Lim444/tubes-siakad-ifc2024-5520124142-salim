@@ -15,14 +15,14 @@
         {{-- Tombol Sebelumnya --}}
         @if ($paginator->onFirstPage())
             <li class="page-item disabled" aria-disabled="true">
-                <span class="page-link" aria-label="Sebelumnya">
-                    <i class="fa-solid fa-chevron-left fa-xs"></i>
+                <span class="page-link" aria-label="Sebelumnya" style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;font-size:13px;line-height:1;overflow:hidden;">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;display:block;overflow:hidden;"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </span>
             </li>
         @else
             <li class="page-item">
-                <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Sebelumnya">
-                    <i class="fa-solid fa-chevron-left fa-xs"></i>
+                <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Sebelumnya" style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;font-size:13px;line-height:1;overflow:hidden;">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;display:block;overflow:hidden;"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </a>
             </li>
         @endif
@@ -55,14 +55,14 @@
         {{-- Tombol Berikutnya --}}
         @if ($paginator->hasMorePages())
             <li class="page-item">
-                <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Berikutnya">
-                    <i class="fa-solid fa-chevron-right fa-xs"></i>
+                <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Berikutnya" style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;font-size:13px;line-height:1;overflow:hidden;">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;display:block;overflow:hidden;"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
             </li>
         @else
             <li class="page-item disabled" aria-disabled="true">
-                <span class="page-link" aria-label="Berikutnya">
-                    <i class="fa-solid fa-chevron-right fa-xs"></i>
+                <span class="page-link" aria-label="Berikutnya" style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;font-size:13px;line-height:1;overflow:hidden;">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;display:block;overflow:hidden;"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </span>
             </li>
         @endif

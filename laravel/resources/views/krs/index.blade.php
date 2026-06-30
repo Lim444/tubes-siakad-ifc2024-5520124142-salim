@@ -6,6 +6,24 @@
 
 <h1 class="page-title"><i class="fa-solid fa-file-pen"></i>Halaman KRS</h1>
 
+@if(Auth::user()->isMahasiswa())
+    <div class="info-card" style="margin-bottom:16px; padding:14px 18px; background:#f7f9ff; border:1px solid #d8e2f6; border-radius:12px;">
+        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+            <div>
+                <div style="font-size:13px; color:#6b7a99; margin-bottom:4px;">NPM</div>
+                <strong style="font-size:15px;">{{ Auth::user()->npm }}</strong>
+            </div>
+            <div>
+                <div style="font-size:13px; color:#6b7a99; margin-bottom:4px;">Nama</div>
+                <strong style="font-size:15px;">{{ Auth::user()->mahasiswa->nama ?? Auth::user()->name }}</strong>
+            </div>
+            <div style="flex:1; min-width:200px; color:#3b4a79; font-size:14px;">
+                Menampilkan daftar KRS Anda sendiri. Data ini hanya dapat dilihat oleh mahasiswa yang sedang login.
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="content-card">
 
     <div class="toolbar">
@@ -31,7 +49,18 @@
                 <i class="fa-solid fa-arrow-down-{{ $krsSortDir === 'asc' ? 'a-z' : 'z-a' }}"></i>
                 {{ $krsSortDir === 'asc' ? 'A-Z' : 'Z-A' }}
             </a>
-            <form class="search-form" method="GET" action="{{ route('krs.index') }}">
+            @include('partials.sort_dropdown', [
+                'id' => 'krsSortBtn',
+                'target' => 'krsTableBody',
+                'formId' => 'krsSearchForm',
+                'options' => [
+                    ['label' => 'Nama Matakuliah', 'col' => 2, 'value' => 'nama_matakuliah'],
+                    ['label' => 'Nama', 'col' => 3, 'value' => 'nama'],
+                ]
+            ])
+            <form id="krsSearchForm" class="search-form" method="GET" action="{{ route('krs.index') }}">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+                <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input name="keyword" type="text" placeholder="Cari KRS..." value="{{ request('keyword') }}">
@@ -58,6 +87,7 @@
                     <th class="col-no">No</th>
                     <th>Kode</th>
                     <th>Nama Matakuliah</th>
+                    <th>Nama Mahasiswa</th>
                     <th>SKS</th>
                     <th>Dosen</th>
                     @if(Auth::user()->isAdmin())
@@ -71,9 +101,10 @@
                     <td class="col-no row-number">{{ $krs->firstItem() + $loop->index }}</td>
                     <td>{{ $item->matakuliah->kode_matakuliah ?? $item->kode_matakuliah }}</td>
                     <td>{{ $item->matakuliah->nama_matakuliah ?? '-' }}</td>
+                    <td>{{ $item->mahasiswa->nama ?? '-' }}</td>
                     <td>{{ $item->matakuliah->sks ?? '-' }}</td>
                     <td>{{ $item->matakuliah->dosen_pengajar ?? '-' }}</td>
-                    @if(Auth::user()->isAdmin())
+                    @if(Auth::user()->isAdmin() || (Auth::user()->role === 'mahasiswa' && $item->npm === Auth::user()->npm))
                         <td class="text-center">
                             <div class="action-buttons">
                                 <form action="{{ route('krs.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin hapus KRS ini?')">
@@ -83,23 +114,25 @@
                                         <i class="fa-solid fa-trash"></i> Hapus
                                     </button>
                                 </form>
-                                <a href="{{ route('krs.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                                </a>
+                                @if(Auth::user()->isAdmin())
+                                    <a href="{{ route('krs.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                @endif
                             </div>
                         </td>
                     @endif
                 </tr>
                 @empty
                 <tr class="empty-row">
-                    <td colspan="{{ Auth::user()->isAdmin() ? 6 : 5 }}">
+                    <td colspan="{{ Auth::user()->isAdmin() ? 7 : 6 }}">
                         <i class="fa-solid fa-file-circle-xmark"></i>
                         Belum ada data KRS yang terdaftar
                     </td>
                 </tr>
                 @endforelse
                 <tr class="empty-row is-hidden" id="krsNoResult">
-                    <td colspan="{{ Auth::user()->isAdmin() ? 6 : 5 }}">
+                    <td colspan="{{ Auth::user()->isAdmin() ? 7 : 6 }}">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         Tidak ada KRS yang cocok dengan pencarian
                     </td>
@@ -122,9 +155,9 @@
         tableBodyId: 'krsTableBody',
         noResultRowId: 'krsNoResult',
         numberSelector: '.row-number',
+        sortBtnId: 'krsSortBtn'
     });
 
-    // Ambil data baris yang sedang terlihat (hasil pencarian), tanpa kolom No & Aksi
     function getVisibleKrsRows() {
         const rows = Array.from(document.querySelectorAll('#krsTableBody tr[data-row="1"]'))
             .filter(row => row.style.display !== 'none');
@@ -134,6 +167,7 @@
             row.children[2].innerText.trim(),
             row.children[3].innerText.trim(),
             row.children[4].innerText.trim(),
+            row.children[5].innerText.trim(),
         ]);
     }
 
@@ -148,7 +182,7 @@
         doc.setFontSize(15);
         doc.text('Data KRS - Sistem Informasi Akademik', 14, 16);
         doc.autoTable({
-            head: [['Kode', 'Nama Matakuliah', 'SKS', 'Dosen']],
+            head: [['Kode', 'Nama Matakuliah', 'Nama Mahasiswa', 'SKS', 'Dosen']],
             body: data,
             startY: 24,
             headStyles: { fillColor: [30, 91, 184] },
@@ -163,9 +197,9 @@
             showNotifModal('error', 'Tidak ada data KRS untuk diekspor.');
             return;
         }
-        const sheetData = [['Kode', 'Nama Matakuliah', 'SKS', 'Dosen'], ...data];
+        const sheetData = [['Kode', 'Nama Matakuliah', 'Nama Mahasiswa', 'SKS', 'Dosen'], ...data];
         const ws = XLSX.utils.aoa_to_sheet(sheetData);
-        ws['!cols'] = [{ wch: 12 }, { wch: 30 }, { wch: 8 }, { wch: 26 }];
+        ws['!cols'] = [{ wch: 12 }, { wch: 30 }, { wch: 24 }, { wch: 8 }, { wch: 26 }];
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'KRS');
         XLSX.writeFile(wb, 'Data-KRS.xlsx');

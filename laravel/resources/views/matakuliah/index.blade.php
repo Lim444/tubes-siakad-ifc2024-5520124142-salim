@@ -25,7 +25,17 @@
                 <i class="fa-solid fa-arrow-down-{{ $mkSortDir === 'asc' ? 'a-z' : 'z-a' }}"></i>
                 {{ $mkSortDir === 'asc' ? 'A-Z' : 'Z-A' }}
             </a>
-            <form class="search-form" method="GET" action="{{ route('matakuliah.index') }}">
+            @include('partials.sort_dropdown', [
+                'id' => 'mkSortBtn',
+                'target' => 'mkTableBody',
+                'formId' => 'mkSearchForm',
+                'options' => [
+                    ['label' => 'Nama Matakuliah', 'col' => 2, 'value' => 'nama_matakuliah'],
+                ]
+            ])
+            <form id="mkSearchForm" class="search-form" method="GET" action="{{ route('matakuliah.index') }}">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+                <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input name="keyword" type="text" placeholder="Cari matakuliah..." value="{{ request('keyword') }}">
@@ -53,6 +63,7 @@
                     <th>Kode</th>
                     <th>Nama Matakuliah</th>
                     <th>SKS</th>
+                    <th>Dosen Pengajar</th>
                     <th class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -63,6 +74,7 @@
                     <td>{{ $mk->kode_matakuliah }}</td>
                     <td>{{ $mk->nama_matakuliah }}</td>
                     <td>{{ $mk->sks }}</td>
+                    <td>{{ $mk->dosen_pengajar }}</td>
                     <td class="text-center">
                         <div class="action-buttons">
                             <form action="{{ route('matakuliah.destroy', $mk->kode_matakuliah) }}" method="POST" onsubmit="return confirm('Yakin hapus matakuliah ini?')">
@@ -80,14 +92,14 @@
                 </tr>
                 @empty
                 <tr class="empty-row">
-                    <td colspan="5">
+                    <td colspan="6">
                         <i class="fa-solid fa-book"></i>
                         Belum ada data matakuliah
                     </td>
                 </tr>
                 @endforelse
                 <tr class="empty-row is-hidden" id="mkNoResult">
-                    <td colspan="5">
+                    <td colspan="6">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         Tidak ada matakuliah yang cocok dengan pencarian
                     </td>
@@ -106,6 +118,7 @@
         tableBodyId: 'mkTableBody',
         noResultRowId: 'mkNoResult',
         numberSelector: '.row-number',
+        sortBtnId: 'mkSortBtn'
     });
 </script>
 @endsection

@@ -785,19 +785,40 @@
             .header-univ-name { font-size: 10px; }
             .header-contact { display: none; }
             .header-divider { display: none; }
-            .nav-container { padding: 0 10px; }
+            .navbar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .nav-container { padding: 0 10px; min-width: max-content; }
+            .nav-left { flex-shrink: 0; }
+            .nav-right { flex-shrink: 0; gap: 8px; }
             .nav-item { padding: 12px 9px; font-size: 12px; }
-            .user-info span { display: none; }
-            .main-content { padding: 0 15px; }
+            .user-info { padding: 4px 8px; }
+            .user-info span:not(.role-badge) { display: none; }
+            .logout-btn { padding: 6px 11px; font-size: 12.5px; }
+            .main-content { padding: 0 14px; margin: 20px auto; }
             .footer-container { grid-template-columns: 1fr; gap: 28px; }
             .footer { padding: 30px 15px 0; }
             .footer-bottom { margin: 0 -15px; }
             .page-title { font-size: 23px; }
             .form-card { padding: 22px 18px; }
-            .content-card { padding: 18px 16px 6px; }
-            .toolbar { justify-content: flex-start; }
-            .toolbar-left, .toolbar-right { width: 100%; }
-            .search-box, .search-box input { width: 100%; }
+            .content-card { padding: 18px 14px 6px; }
+            .toolbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .toolbar-left, .toolbar-right { width: 100%; flex-wrap: wrap; }
+            .search-form { width: 100%; }
+            .search-box { flex: 1; }
+            .search-box input, .search-box { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .header { min-height: 62px; }
+            .header-logo-img { height: 42px; }
+            .header-siak-title { font-size: 15px; }
+            .main-content { padding: 0 10px; margin: 16px auto; }
+            .page-title { font-size: 20px; }
+            .page-title i { font-size: 18px; }
+            .content-card { padding: 14px 12px 6px; }
+            .form-card { padding: 18px 14px; }
+            .btn { padding: 8px 13px; font-size: 12.5px; }
+            .btn-sm { padding: 6px 10px; font-size: 12px; }
+            .btn-lg { padding: 11px 20px; font-size: 13.5px; }
         }
 
         /* Pagination */
@@ -830,20 +851,49 @@
             justify-content: center;
             min-width: 32px;
             height: 32px;
-            padding: 0 10px;
+            padding: 0 8px;
             border: 1px solid #d7dde8;
             border-radius: 7px;
             font-size: 13px;
+            line-height: 1;
             font-family: inherit;
             color: #1e5bb8;
             background: #fff;
             text-decoration: none;
             transition: background .15s, border-color .15s;
             cursor: pointer;
+            overflow: hidden;
         }
 
         .page-item .page-link i {
-            font-size: 0.9em;
+            font-size: 14px;
+        }
+
+        .pagination .page-item .page-link,
+        .pagination .page-item span.page-link {
+            min-width: 28px !important;
+            width: auto !important;
+            height: 28px !important;
+            padding: 0 8px !important;
+            line-height: 1 !important;
+            font-size: 13px !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+        }
+
+        .page-item .page-link svg {
+            display: block;
+            flex-shrink: 0;
+            width: 12px !important;
+            height: 12px !important;
+            max-width: 12px !important;
+            max-height: 12px !important;
+        }
+
+        .page-item .page-link svg path,
+        .page-item .page-link svg polyline {
+            vector-effect: non-scaling-stroke;
+            stroke-width: 2.2 !important;
         }
 
         .page-item .page-link:hover {

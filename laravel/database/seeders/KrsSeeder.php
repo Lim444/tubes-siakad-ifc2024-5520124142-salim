@@ -14,6 +14,12 @@ class KrsSeeder extends Seeder
         $npmList = DB::table('mahasiswa')->pluck('npm')->toArray();
         $mkList = DB::table('matakuliah')->pluck('kode_matakuliah')->toArray();
 
+        DB::table('krs')->insert([
+            ['npm' => '5520124142', 'kode_matakuliah' => 'IF1104', 'created_at' => now(), 'updated_at' => now()],
+            ['npm' => '5520124142', 'kode_matakuliah' => 'IF1106', 'created_at' => now(), 'updated_at' => now()],
+            ['npm' => '5520124142', 'kode_matakuliah' => 'IF1110', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
         for ($i = 0; $i < 5; $i++) {
             DB::table('krs')->insert([
                 'npm' => $faker->randomElement($npmList),

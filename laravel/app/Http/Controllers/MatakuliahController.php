@@ -14,7 +14,8 @@ class MatakuliahController extends Controller
                         ? $request->get('sort') : 'kode_matakuliah';
         $direction = $request->get('direction') === 'desc' ? 'desc' : 'asc';
 
-        $matakuliahs = Matakuliah::when($search, function ($query, $search) {
+        $matakuliahs = Matakuliah::with('jadwal.dosen')
+            ->when($search, function ($query, $search) {
                 return $query->where('kode_matakuliah', 'like', "%{$search}%")
                     ->orWhere('nama_matakuliah', 'like', "%{$search}%")
                     ->orWhere('sks', 'like', "%{$search}%");

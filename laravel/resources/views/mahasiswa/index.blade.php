@@ -25,7 +25,18 @@
                 <i class="fa-solid fa-arrow-down-{{ $mhsSortDir === 'asc' ? 'a-z' : 'z-a' }}"></i>
                 {{ $mhsSortDir === 'asc' ? 'A-Z' : 'Z-A' }}
             </a>
-            <form class="search-form" method="GET" action="{{ route('mahasiswa.index') }}">
+            @include('partials.sort_dropdown', [
+                'id' => 'mhsSortBtn',
+                'target' => 'mhsTableBody',
+                'formId' => 'mhsSearchForm',
+                'options' => [
+                    ['label' => 'Nama', 'col' => 2, 'value' => 'nama'],
+                    ['label' => 'Dosen Wali', 'col' => 3, 'value' => 'dosen'],
+                ]
+            ])
+            <form id="mhsSearchForm" class="search-form" method="GET" action="{{ route('mahasiswa.index') }}">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+                <input type="hidden" name="direction" value="{{ request('direction', 'asc') }}">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input name="keyword" type="text" placeholder="Cari mahasiswa..." value="{{ request('keyword') }}">
@@ -106,6 +117,7 @@
         tableBodyId: 'mhsTableBody',
         noResultRowId: 'mhsNoResult',
         numberSelector: '.row-number',
+        sortBtnId: 'mhsSortBtn'
     });
 </script>
 @endsection

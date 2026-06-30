@@ -11,7 +11,7 @@
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     @stack('styles')
 
 </head>
@@ -356,23 +356,31 @@
             });
         }
 
-        if (sortBtn) {
-            sortBtn.addEventListener('click', function () {
-                const rows = dataRows();
-                const colIndex = opts.sortColumnIndex ?? 0;
-                rows.sort((a, b) => {
-                    const ta = (a.children[colIndex]?.innerText || '').trim().toLowerCase();
-                    const tb = (b.children[colIndex]?.innerText || '').trim().toLowerCase();
-                    return sortAsc ? ta.localeCompare(tb) : tb.localeCompare(ta);
-                });
-                rows.forEach(r => tbody.appendChild(r));
-                renumber();
-                sortAsc = !sortAsc;
-                sortBtn.innerHTML = sortAsc
-                    ? '<i class="fa-solid fa-arrow-down-a-z"></i> A-Z'
-                    : '<i class="fa-solid fa-arrow-down-z-a"></i> Z-A';
-                sortBtn.classList.toggle('is-active', true);
+        // performSort exposed so dropdowns can request sorting by column index
+        function performSort(colIndex = (opts.sortColumnIndex ?? 0)) {
+            const rows = dataRows();
+            rows.sort((a, b) => {
+                const ta = (a.children[colIndex]?.innerText || '').trim().toLowerCase();
+                const tb = (b.children[colIndex]?.innerText || '').trim().toLowerCase();
+                return sortAsc ? ta.localeCompare(tb) : tb.localeCompare(ta);
             });
+            rows.forEach(r => tbody.appendChild(r));
+            renumber();
+            if (sortBtn) {
+                // only show icon to keep button compact
+                sortBtn.innerHTML = sortAsc
+                    ? '<i class="fa-solid fa-arrow-down-a-z"></i>'
+                    : '<i class="fa-solid fa-arrow-down-z-a"></i>';
+                sortBtn.classList.add('is-active');
+            }
+            sortAsc = !sortAsc;
+        }
+
+        // Expose named function on window so partial dropdowns can call it
+        try {
+            window['dataTableSort_' + opts.tableBodyId] = performSort;
+        } catch (e) {
+            // no-op
         }
     }
 </script>

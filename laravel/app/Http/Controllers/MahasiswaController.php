@@ -11,18 +11,22 @@ class MahasiswaController extends Controller
     public function index(Request $request)
     {
         $search    = $request->keyword;
-        $sort      = in_array($request->get('sort'), ['npm', 'nama']) ? $request->get('sort') : 'npm';
+        $sort      = in_array($request->get('sort'), ['npm', 'nama', 'dosen']) ? $request->get('sort') : 'npm';
         $direction = $request->get('direction') === 'desc' ? 'desc' : 'asc';
 
-        $mahasiswas = Mahasiswa::with('dosen')
+        $mahasiswas = Mahasiswa::select('mahasiswa.*')
+            ->with('dosen')
+            ->leftJoin('dosen', 'mahasiswa.nidn', 'dosen.nidn')
             ->when($search, function ($query, $search) {
-                return $query->where('npm', 'like', "%{$search}%")
-                    ->orWhere('nama', 'like', "%{$search}%")
-                    ->orWhereHas('dosen', function ($q) use ($search) {
-                        $q->where('nama', 'like', "%{$search}%");
-                    });
+                return $query->where('mahasiswa.npm', 'like', "%{$search}%")
+                    ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                    ->orWhere('dosen.nama', 'like', "%{$search}%");
             })
-            ->orderBy($sort, $direction)
+            ->when($sort === 'dosen', function ($query) use ($direction) {
+                return $query->orderBy('dosen.nama', $direction);
+            }, function ($query) use ($sort, $direction) {
+                return $query->orderBy('mahasiswa.' . $sort, $direction);
+            })
             ->paginate(10)
             ->withQueryString();
 

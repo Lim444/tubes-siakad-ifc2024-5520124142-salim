@@ -137,6 +137,7 @@ Menampilkan daftar mata kuliah yang telah diambil. Terdapat fitur ekspor data ke
 # 1. Clone repository
 git clone https://github.com/[username]/tubes-siakad-ifc2024-5520124142-salim.git
 cd tubes-siakad-ifc2024-5520124142-salim
+cd laravel
 
 # 2. Install dependensi PHP & JS
 composer install
@@ -170,40 +171,6 @@ Setelah server berjalan, akses aplikasi di: `http://127.0.0.1:8000`
 |-----------|----------|----------|
 | Admin     | admin    | 12345    |
 | Mahasiswa | 5520124142 | 12345    |
-
----
-
-## Struktur Direktori Utama
-
-```
-tubes-siakad-ifc2024-5520124142-salim/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/        # AuthController, DashboardController, dll.
-│   │   └── Middleware/         # AdminMiddleware, Authenticate
-│   ├── Models/                 # User, Dosen, Mahasiswa, Matakuliah, Jadwal, Krs
-│   └── Providers/
-├── database/
-│   ├── migrations/             # Skema tabel database
-│   └── seeders/                # Data awal (DatabaseSeeder, UserSeeder, dll)
-├── resources/
-│   └── views/
-│       ├── layouts/            # Template utama (app.blade.php)
-│       ├── auth/               # Halaman login
-│       ├── dashboard/          # Halaman dashboard
-│       ├── dosen/              # CRUD dosen
-│       ├── mahasiswa/          # CRUD mahasiswa
-│       ├── matakuliah/         # CRUD mata kuliah
-│       ├── jadwal/             # CRUD jadwal
-│       ├── krs/                # CRUD KRS
-│       └── vendor/pagination/  # Custom pagination Bootstrap
-├── routes/
-│   └── web.php                 # Definisi seluruh route
-├── public/
-│   └── css/                    # Stylesheet (app.css, auth.css, dashboard.css)
-├── screenshots/                # Screenshot tiap halaman
-└── README.md
-```
 
 ---
 
